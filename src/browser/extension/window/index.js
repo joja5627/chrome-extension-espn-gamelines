@@ -1,4 +1,4 @@
-import 'remotedev-monitor-components/lib/presets';
+// import 'remotedev-monitor-components/lib/presets';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
@@ -6,6 +6,8 @@ import { UPDATE_STATE } from 'remotedev-app/lib/constants/actionTypes';
 import App from '../../../app/containers/App';
 import configureStore from '../../../app/stores/windowStore';
 import getPreloadedState from '../background/getPreloadedState';
+
+import './window.css';
 
 const position = location.hash;
 let preloadedState;

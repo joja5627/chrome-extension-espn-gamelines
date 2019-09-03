@@ -1,14 +1,23 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { liftedDispatch, getReport } from 'remotedev-app/lib/actions';
+import { liftedDispatch } from 'remotedev-app/lib/actions';
 import { getActiveInstance } from 'remotedev-app/lib/reducers/instances';
-import enhance from 'remotedev-app/lib/hoc';
+import style from './App.css';
+import Header from '../components/Header';
+import MainSection from '../components/MainSection';
+import * as TodoActions from '../actions/todos';
 
-
-@enhance
+@connect(
+  state => ({
+    todos: state.todos
+  }),
+  dispatch => ({
+    actions: bindActionCreators(TodoActions, dispatch)
+  })
+)
 class App extends Component {
-  openWindow = (position) => {
+  openWindow = position => {
     chrome.runtime.sendMessage({ type: 'OPEN', position });
   };
   openOptionsPage = () => {
@@ -20,69 +29,130 @@ class App extends Component {
   };
 
   getLines() {
+    fetch('https://api.actionnetwork.com/web/v1/scoreboard/ncaaf', {
+      credentials: 'omit',
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json',
+        'sec-fetch-mode': 'no-cors'
+      },
+      referrer: 'https://www.actionnetwork.com/nfl/live-odds',
+      referrerPolicy: 'no-referrer-when-downgrade',
+      body: null,
+      method: 'GET',
+      mode: 'cors'
+    })
+      .then(res => res.json())
+      .then(json => console.log(JSON.stringify(json, null, 2)));
 
-    fetch("https://api.actionnetwork.com/web/v1/scoreboard/ncaaf",
-      {
-        "credentials": "omit", "headers": { "accept": "application/json", "content-type": "application/json", "sec-fetch-mode": "no-cors" },
-        "referrer": "https://www.actionnetwork.com/nfl/live-odds", "referrerPolicy": "no-referrer-when-downgrade",
-        "body": null, "method": "GET", "mode": "cors"
-      }).then(res => res.json()).then(json => console.log(JSON.stringify(json,null,2)));
+    fetch('https://api.actionnetwork.com/web/v1/scoreboard/nba', {
+      credentials: 'omit',
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json',
+        'sec-fetch-mode': 'no-cors'
+      },
+      referrer: 'https://www.actionnetwork.com/nfl/live-odds',
+      referrerPolicy: 'no-referrer-when-downgrade',
+      body: null,
+      method: 'GET',
+      mode: 'cors'
+    })
+      .then(res => res.json())
+      .then(json => console.log(JSON.stringify(json, null, 2)));
 
-    fetch("https://api.actionnetwork.com/web/v1/scoreboard/nba",
-      {
-        "credentials": "omit", "headers": { "accept": "application/json", "content-type": "application/json", "sec-fetch-mode": "no-cors" },
-        "referrer": "https://www.actionnetwork.com/nfl/live-odds", "referrerPolicy": "no-referrer-when-downgrade",
-        "body": null, "method": "GET", "mode": "cors"
-      }).then(res => res.json()).then(json => console.log(JSON.stringify(json,null,2)));
+    fetch('https://api.actionnetwork.com/web/v1/scoreboard/soccer', {
+      credentials: 'omit',
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json',
+        'sec-fetch-mode': 'no-cors'
+      },
+      referrer: 'https://www.actionnetwork.com/nfl/live-odds',
+      referrerPolicy: 'no-referrer-when-downgrade',
+      body: null,
+      method: 'GET',
+      mode: 'cors'
+    })
+      .then(res => res.json())
+      .then(json => console.log(JSON.stringify(json, null, 2)));
 
-    fetch("https://api.actionnetwork.com/web/v1/scoreboard/soccer",
-      {
-        "credentials": "omit", "headers": { "accept": "application/json", "content-type": "application/json", "sec-fetch-mode": "no-cors" },
-        "referrer": "https://www.actionnetwork.com/nfl/live-odds", "referrerPolicy": "no-referrer-when-downgrade",
-        "body": null, "method": "GET", "mode": "cors"
-      }).then(res => res.json()).then(json => console.log(JSON.stringify(json,null,2)));
+    fetch('https://api.actionnetwork.com/web/v1/scoreboard/nfl', {
+      credentials: 'omit',
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json',
+        'sec-fetch-mode': 'no-cors'
+      },
+      referrer: 'https://www.actionnetwork.com/nfl/live-odds',
+      referrerPolicy: 'no-referrer-when-downgrade',
+      body: null,
+      method: 'GET',
+      mode: 'cors'
+    })
+      .then(res => res.json())
+      .then(json => console.log(JSON.stringify(json, null, 2)));
 
-    fetch("https://api.actionnetwork.com/web/v1/scoreboard/nfl",
-      {
-        "credentials": "omit", "headers": { "accept": "application/json", "content-type": "application/json", "sec-fetch-mode": "no-cors" },
-        "referrer": "https://www.actionnetwork.com/nfl/live-odds", "referrerPolicy": "no-referrer-when-downgrade",
-        "body": null, "method": "GET", "mode": "cors"
-      }).then(res => res.json()).then(json => console.log(JSON.stringify(json,null,2)));
+    fetch('https://api.actionnetwork.com/web/v1/scoreboard/nhl', {
+      credentials: 'omit',
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json',
+        'sec-fetch-mode': 'no-cors'
+      },
+      referrer: 'https://www.actionnetwork.com/nfl/live-odds',
+      referrerPolicy: 'no-referrer-when-downgrade',
+      body: null,
+      method: 'GET',
+      mode: 'cors'
+    })
+      .then(res => res.json())
+      .then(json => console.log(JSON.stringify(json, null, 2)));
 
-    fetch("https://api.actionnetwork.com/web/v1/scoreboard/nhl",
-      {
-        "credentials": "omit", "headers": { "accept": "application/json", "content-type": "application/json", "sec-fetch-mode": "no-cors" },
-        "referrer": "https://www.actionnetwork.com/nfl/live-odds", "referrerPolicy": "no-referrer-when-downgrade",
-        "body": null, "method": "GET", "mode": "cors"
-      }).then(res => res.json()).then(json => console.log(JSON.stringify(json,null,2)));
-
-    fetch("https://api.actionnetwork.com/web/v1/scoreboard/mlb",
-      {
-        "credentials": "omit", "headers": { "accept": "application/json", "content-type": "application/json", "sec-fetch-mode": "no-cors" },
-        "referrer": "https://www.actionnetwork.com/nfl/live-odds", "referrerPolicy": "no-referrer-when-downgrade",
-        "body": null, "method": "GET", "mode": "cors"
-      }).then(res => res.json()).then(json => console.log(JSON.stringify(json,null,2)));
-
-
-
-
+    fetch('https://api.actionnetwork.com/web/v1/scoreboard/mlb', {
+      credentials: 'omit',
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json',
+        'sec-fetch-mode': 'no-cors'
+      },
+      referrer: 'https://www.actionnetwork.com/nfl/live-odds',
+      referrerPolicy: 'no-referrer-when-downgrade',
+      body: null,
+      method: 'GET',
+      mode: 'cors'
+    })
+      .then(res => res.json())
+      .then(json => console.log(JSON.stringify(json, null, 2)));
   }
 
-
-
   render() {
-  
-    const { liftedState } = this.props;
+    const { liftedState, todos, actions } = this.props;
+    
+    let stateIndex = liftedState.currentStateIndex
+    let currentState = liftedState.computedStates[stateIndex]
+    if(currentState.app){
+        let content = currentState.app.playingStream.content
+        console.log(content)
+    }
+    
 
     return (
-      <div>
+      <div className={"normal"}>
+        <header>
+          <h1>ESPN Lines APP</h1>
+          <div></div>
         
-        <button onClick={this.getLines}></button>
-
+        </header>
+        <section className={'main'}>
+          <button refresh lines onClick={this.handleLinesRefresh} />
+         
+        </section>
+        <footer className={'footer'}>
+          
+        </footer>
       </div>
-    )
-
-
+    );
   }
 }
 
@@ -120,14 +190,14 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    liftedDispatch: bindActionCreators(liftedDispatch, dispatch),
-    getReport: bindActionCreators(getReport, dispatch),
-    togglePersist: () => { dispatch({ type: 'TOGGLE_PERSIST' }); }
+    liftedDispatch: bindActionCreators(liftedDispatch, dispatch)
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
-
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
 
 // <div style={styles.container}>
 //         <div style={styles.buttonBar}>

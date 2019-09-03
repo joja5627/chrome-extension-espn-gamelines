@@ -1,27 +1,22 @@
 {
-  "version": "2.17.1",
-  "name": "Redux DevTools",
-  "short_name": "Redux DevTools",
-  "description": "Redux DevTools for debugging application's state changes.",
-  "homepage_url": "https://github.com/zalmoxisus/redux-devtools-extension",
-  "manifest_version": 2,
+  "version": "0.0.0",
+  "name": "ESPN Lines Chrome Extension",
+  "short_name": "ESPN Lines",
+  "description": "ESPN Lines extension for live gambling",
   "page_action": {
     "default_icon": "img/logo/gray.png",
-    "default_title": "Redux DevTools",
-    "default_popup": "window.html#popup"
+    "default_title": "ESPN Lines",
+    "default_popup": "window.html"
   },
   "commands": {
     "devtools-left": {
-      "description": "DevTools window to left"
+      "description": "ESPN Lines Plugin to left"
     },
     "devtools-right": {
-      "description": "DevTools window to right"
+      "description": "ESPN Lines Plugin to right"
     },
     "devtools-bottom": {
-      "description": "DevTools window to bottom"
-    },
-    "devtools-remote": {
-      "description": "Remote DevTools"
+      "description": "ESPN Lines Plugin to bottom"
     },
     "_execute_page_action": {
       "suggested_key": {
@@ -51,6 +46,7 @@
       "all_frames": true
     }
   ],
+  "manifest_version":2,
   "devtools_page": "devtools.html",
   "web_accessible_resources": [
     "js/page.bundle.js",

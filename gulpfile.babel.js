@@ -79,11 +79,11 @@ gulp.task('webpack:build:extension', (callback) => {
     .then(() => webpackProcess(prodConfig))
     .then(() => {
       const dest = './build/extension';
-      fs.rename(
-        `${dest}/js/redux-devtools-extension.bundle.js`,
-        `${dest}/js/redux-devtools-extension.js`,
-        callback
-      );
+    //   fs.rename(
+    //     `${dest}/js/redux-devtools-extension.bundle.js`,
+    //     `${dest}/js/redux-devtools-extension.js`,
+    //     callback
+    //   );
     });
 });
 
@@ -116,9 +116,7 @@ gulp.task('copy:build:firefox', ['build:extension'], () => {
   copy('./build/firefox');
 });
 
-/*
- * compress task
- */
+
 
 gulp.task('compress:extension', () => {
   gulp.src('build/extension/**')
@@ -132,9 +130,6 @@ gulp.task('compress:firefox', () => {
     .pipe(gulp.dest('./build'));
 });
 
-/*
- * watch tasks
- */
 
 gulp.task('views:watch', () => {
   gulp.watch('./src/browser/views/*.pug', ['views:dev']);
@@ -151,12 +146,7 @@ gulp.task('test:chrome', () => {
     .on('end', () => crdv.stop());
 });
 
-gulp.task('test:electron', () => {
-  crdv.start();
-  return gulp.src('./test/electron/*.spec.js')
-    .pipe(mocha({ require: ['babel-polyfill', 'co-mocha'] }))
-    .on('end', () => crdv.stop());
-});
+
 
 gulp.task('build:web', ['replace-webpack-code', 'webpack:dev', 'views:dev', 'copy:dev']);
 gulp.task('build:extension', ['replace-webpack-code', 'webpack:build:extension', 'views:build:extension', 'copy:build:extension']);

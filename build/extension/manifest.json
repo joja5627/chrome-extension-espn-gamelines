@@ -1,23 +1,25 @@
 {
   "version": "0.0.0",
-  "name": "ESPN Lines Chrome Extension",
-  "short_name": "ESPN Lines",
-  "description": "ESPN Lines extension for live gambling",
+  "name": "ESPN Game Lines Extension",
+  "short_name": "ESPN Game Lines Extension",
+  "description": "ESPN Game Lines Extension for gambling",
+  "manifest_version": 2,
   "page_action": {
     "default_icon": "img/logo/gray.png",
-    "default_title": "ESPN Lines",
+    "default_title": "ESPN Games Lines",
     "default_popup": "window.html"
   },
   "commands": {
     "devtools-left": {
-      "description": "ESPN Lines Plugin to left"
+      "description": "ESPN lines window to left"
     },
     "devtools-right": {
-      "description": "ESPN Lines Plugin to right"
+      "description": "ESPN lines window to right"
     },
     "devtools-bottom": {
-      "description": "ESPN Lines Plugin to bottom"
+      "description": "ESPN lines window to bottom"
     },
+    
     "_execute_page_action": {
       "suggested_key": {
         "default": "Ctrl+Shift+E"
@@ -46,7 +48,12 @@
       "all_frames": true
     }
   ],
-  "manifest_version":2,
+  "devtools_page": "devtools.html",
+  "web_accessible_resources": [
+    "js/page.bundle.js",
+    "js/inject.bundle.js",
+    "js/redux-devtools-extension.js"
+  ],
   "externally_connectable": {
     "ids": ["*"]
   },

@@ -45,28 +45,7 @@ class App extends Component {
 
   }
 
-
-  renderCurrentLines = () => {
-    let { liftedContent, linesResponse } = this.state
-    console.log(liftedContent)
-    console.log(JSON.stringify(linesResponse["nfl"].games[0], null, 2))
-    if (liftedContent.subtitle.search(/ncaa/i) !== -1) {
-      console.log(JSON.stringify(linesResponse["ncaaf"], null, 2))
-    } else if (liftedContent.subtitle.search(/nba/i) !== -1) {
-      console.log(JSON.stringify(linesResponse["nba"], null, 2))
-    } else if (liftedContent.subtitle.search(/soccer/i) !== -1) {
-      console.log(JSON.stringify(linesResponse["soccer"], null, 2))
-    } else if (liftedContent.subtitle.search(/nfl/i) !== -1) {
-      console.log(JSON.stringify(linesResponse["nfl"], null, 2))
-    } else if (liftedContent.subtitle.search(/nhl/i) !== -1) {
-      console.log(JSON.stringify(linesResponse["nhl"], null, 2))
-    } else if (liftedContent.subtitle.search(/mlb/i) !== -1) {
-      console.log(JSON.stringify(linesResponse["mlb"], null, 2))
-    } else {
-      return <h1>No lines available for current stream</h1>
-    }
-
-  }
+ 
 
 
 
@@ -78,7 +57,7 @@ class App extends Component {
     let currentContent = liftedState.computedStates[stateIndex].state.app.playingStream.content
 
     if (currentContent != this.state.liftedContent) {
-     
+
       this.setState({
         liftedContent: currentContent
       })
@@ -100,7 +79,7 @@ class App extends Component {
             </div>
           }
         </section>
-        {this.state.liftedContent && <LinesComponent liftedContent={this.state.liftedContent}/> }
+        {this.state.liftedContent && <LinesComponent liftedContent={this.state.liftedContent} />}
       </div>
     )
 

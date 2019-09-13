@@ -6,6 +6,10 @@ import { UPDATE_STATE } from 'remotedev-app/lib/constants/actionTypes';
 import App from '../../../app/containers/App';
 import configureStore from '../../../app/stores/windowStore';
 import getPreloadedState from '../background/getPreloadedState';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import $ from 'jquery';
+import Popper from 'popper.js';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 const position = location.hash;
 let preloadedState;

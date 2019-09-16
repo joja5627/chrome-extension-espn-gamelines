@@ -1,0 +1,26 @@
+{
+    "id": "0465890a-23f4-4153-a33b-4d4edd1350e8",
+    "eventId": 100032573,
+    "isEvent": true,
+    "status": "live",
+    "type": "listing",
+    "imageFormat": "16x9",
+    "ratio": "16x9",
+    "size": "md",
+    "name": "(5) Medvedev vs. Dimitrov (Men's Semifinals)",
+    "subtitle": "ESPN • US Open",
+    "imageHref": "https://artwork.api.espn.com/artwork/collections/airings/0465890a-23f4-4153-a33b-4d4edd1350e8/default?width=640&apikey=1ngjw23osgcis1i1vbj96lmfqs&timestamp=201909061600",
+    "date": "Friday, September 06",
+    "shortDate": "Fri, 9/6",
+    "utc": "2019-09-06T13:00:01.549-07:00",
+    "time": "1:00 PM",
+    "includeSponsor": false,
+    "showKey": false,
+    "isLocked": false,
+    "isPersonalized": false,
+    "links": {
+      "appPlay": "sportscenter://x-callback-url/showWatchStream?playGameID=100032573",
+      "play": "https://watch.product.api.espn.com/api/product/v3/watchespn/web/playback/event?id=0465890a-23f4-4153-a33b-4d4edd1350e8&tz=UTC-0700&lang=en&countryCode=US&entitlements=ESPN_PLUS&features=openAuthz"
+    },
+    "iconHref": "tennis"
+  }

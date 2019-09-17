@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { liftedDispatch } from 'remotedev-app/lib/actions';
 import { getActiveInstance } from 'remotedev-app/lib/reducers/instances';
 import LinesComponent from './LinesComponent';
+import { fetchLines } from "../reducers/window/fetchLines";
+import {fetchLinesDispatch} from '../reducers/window/fetchLinesDispatch';
 
 
 const marginLeft30 = {
@@ -18,33 +20,12 @@ const firstSection = {
 class App extends Component {
   constructor(props) {
     super(props);
+    console.log(props)
     this.state = {
-        linesResponse:{},
       ...props
     }
   }
-//   setLines() {
-//     let BASE_URL = "https://api.actionnetwork.com/web/v1/scoreboard/"
-//     let sports = ["ncaaf", "soccer", "nba", "soccer", "nfl", "nhl", "mlb"]
-//     for (var i = 0; i < sports.length; i++) {
-//       let sport = sports[i]
-//       fetch(BASE_URL + sport, {
-//         "credentials": "omit", "headers": { "accept": "application/json", "content-type": "application/json", "sec-fetch-mode": "no-cors" },
-//         "referrer": "https://www.actionnetwork.com/nfl/live-odds", "referrerPolicy": "no-referrer-when-downgrade",
-//         "body": null, "method": "GET", "mode": "cors"
-//       })
-//         .then(response => response.json())
-//         .then(json => {
-//           let sportId = json.league.name
-//           let response = {
-//             sportId: json
-//           }
-//           this.setState({ linesResponse: [...this.state.linesResponse, ...response] })
 
-//         })
-//     }
-
-//   }
   componentDidUpdate(prevProps, prevState) {
 
     const { liftedState } = this.props;
@@ -60,37 +41,13 @@ class App extends Component {
     }
   }
   componentDidMount() {
-    let BASE_URL = 'https://api.actionnetwork.com/web/v1/scoreboard/';
-    let sports = ['ncaaf', 'soccer', 'nba', 'nfl', 'nhl', 'mlb'];
-    for (var i = 0; i < sports.length; i++) {
-      let sport = sports[i];
-      fetch(BASE_URL + sport, {
-        credentials: 'omit',
-        headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
-          'sec-fetch-mode': 'no-cors'
-        },
-        referrer: 'https://www.actionnetwork.com/nfl/live-odds',
-        referrerPolicy: 'no-referrer-when-downgrade',
-        body: null,
-        method: 'GET',
-        mode: 'cors'
-      })
-        .then(response => response.json())
-        .then(json => {
-            
-          if (json.league && (json.games.length > 1)) {
-            let currentResponse = this.state.linesResponse;
-            currentResponse[json.league.name] = json;
-            this.setState({ linesResponse: currentResponse });
-          }
-        });
-    }
+    //this.props.
+   
   }
   render() {
-      const {linesResponse,liftedContent} = this.state
+      const {linesResponse,liftedContent} = this.props
 
+  console.log(linesResponse)
     return (
       <div>
         <header>
@@ -99,14 +56,14 @@ class App extends Component {
         <section>
           {liftedContent &&
             <div style={firstSection}>
-              <p>{this.state.liftedContent.name}</p>
-              <p>{this.state.liftedContent.date}</p>
-              <p>{this.state.liftedContent.subtitle}</p>
-              <p>{this.state.liftedContent.time}</p>
+              <p>{liftedContent.name}</p>
+              <p>{liftedContent.date}</p>
+              <p>{liftedContent.subtitle}</p>
+              <p>{liftedContent.time}</p>
             </div>
           }
         </section>
-        { (linesResponse && liftedContent) && <LinesComponent liftedContent={liftedContent} linesResponse={linesResponse}  />}
+        {(linesResponse & liftedContent) && <LinesComponent liftedContent={liftedContent} linesResponse={linesResponse}  />}
       </div>
     )
 
@@ -124,14 +81,18 @@ function mapStateToProps(state) {
     
   const instances = state.instances;
   const id = getActiveInstance(instances);
+  const linesResponse = state.linesResponse;
+  // dispatch(fetchLines());
   return {
-    liftedState: instances.states[id]
+    liftedState: instances.states[id],
+    linesResponse: linesResponse
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     liftedDispatch: bindActionCreators(liftedDispatch, dispatch),
+    linesResponse:  bindActionCreators(fetchLinesDispatch, dispatch)  
   };
 }
 

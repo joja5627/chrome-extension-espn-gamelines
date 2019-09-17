@@ -404,8 +404,8 @@ class LinesComponent extends Component {
   };
 
   renderLines = lines => {
+    
     let uniqueIds = [...new Set(lines.map(line => line.book_id))];
-
     let currentLines = uniqueIds.map(id => {
       return lines
         .filter(function(line) {
@@ -427,14 +427,14 @@ class LinesComponent extends Component {
             </tr>
           </thead>
           <tbody>
-            {currentLines.map((line, index) => {
+            {/* {currentLines.map((line, index) => {
               return (
                 <div>
                   <p>{this.findBook(line.book_id)}</p>
                   <p> {JSON.stringify()}</p>
                 </div>
               );
-            })}
+            })} */}
             {/*
      <tr>
        <th scope="row">2</th>
@@ -536,28 +536,31 @@ class LinesComponent extends Component {
   };
   renderLiveEvents = () => {
     let { liftedContent, linesResponse } = this.state;
+    console.log(linesResponse)
+    let sport = linesResponse["nfl"]
 
     return (
       <div style={marginLeft30}>
-        {Object.keys(linesResponse).map(sport => {
-          console.log(linesResponse[sport].league.description);
-          return (
-            <div>
+        <div>
               <h2>{linesResponse[sport].league.description}</h2>
-              {this.renderGames(linesResponse[sport].games)}
+              {this.renderGames(sport.games)}
             </div>
-          );
-        })}
+          
+        {/* {Object.keys(linesResponse).map(sport => {
+          // console.log(linesResponse[sport].league.description);
+       
+        })} */}
       </div>
     );
   };
 
   render() {
+  
     return (
       <div>
         <section style={marginLeft30}>
           <h1>STREAMING EVENT</h1>
-          {this.renderCurrentLines()}
+          {/* {this.renderCurrentLines()} */}
         </section>
         <section style={marginLeft30}>
           <h1>LIVE EVENTS</h1>

@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 import { liftedDispatch } from 'remotedev-app/lib/actions';
 import { getActiveInstance } from 'remotedev-app/lib/reducers/instances';
 import LinesComponent from './LinesComponent';
-import { fetchLines } from "../reducers/window/fetchLines";
-import {fetchLinesDispatch} from '../reducers/window/fetchLinesDispatch';
-
-
+import getLines from '../service/getLines';
+import linesReducer from '../reducers/window/linesReducer';
+import {getLinesDispatch} from '../actions/getLinesDispatch';
 const marginLeft30 = {
   marginLeft: "30px"
 }
@@ -20,8 +19,8 @@ const firstSection = {
 class App extends Component {
   constructor(props) {
     super(props);
-    console.log(props)
     this.state = {
+      linesResponse:{},
       ...props
     }
   }
@@ -39,15 +38,25 @@ class App extends Component {
         liftedContent: currentContent
       })
     }
+    
+  
   }
   componentDidMount() {
-    //this.props.
+  
+    getLines().then(linesResponse  => {
+      let nonNullLinesResponse = linesResponse.filter(Boolean)
+      // nonNullLinesResponse.map(field => ...field)
+
+      this.setState({
+        linesResponse:Object.assign({},nonNullLinesResponse)
+      })
+      
+    });
    
   }
   render() {
-      const {linesResponse,liftedContent} = this.props
+      const {linesResponse,liftedContent} = this.state
 
-  console.log(linesResponse)
     return (
       <div>
         <header>
@@ -63,7 +72,7 @@ class App extends Component {
             </div>
           }
         </section>
-        {(linesResponse & liftedContent) && <LinesComponent liftedContent={liftedContent} linesResponse={linesResponse}  />}
+        {(linesResponse && liftedContent) && <LinesComponent liftedContent={liftedContent} linesResponse={linesResponse}  />}
       </div>
     )
 
@@ -77,22 +86,21 @@ App.propTypes = {
 };
 
 function mapStateToProps(state) {
-    
-    
+
   const instances = state.instances;
   const id = getActiveInstance(instances);
-  const linesResponse = state.linesResponse;
-  // dispatch(fetchLines());
+
   return {
-    liftedState: instances.states[id],
-    linesResponse: linesResponse
+    liftedState: instances.states[id]
   };
 }
 
+
 function mapDispatchToProps(dispatch) {
+ 
   return {
     liftedDispatch: bindActionCreators(liftedDispatch, dispatch),
-    linesResponse:  bindActionCreators(fetchLinesDispatch, dispatch)  
+    getLinesDispatch: bindActionCreators(getLinesDispatch,dispatch)
   };
 }
 

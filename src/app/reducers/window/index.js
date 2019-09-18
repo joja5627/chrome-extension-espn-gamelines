@@ -5,7 +5,7 @@ import notification from 'remotedev-app/lib/reducers/notification';
 import socket from 'remotedev-app/lib/reducers/socket';
 import reports from 'remotedev-app/lib/reducers/reports';
 import test from 'remotedev-app/lib/reducers/test';
-import linesReducer from './fetchLines'
+import linesReducer from './linesReducer'
 const rootReducer = combineReducers({
   instances,
   monitor,

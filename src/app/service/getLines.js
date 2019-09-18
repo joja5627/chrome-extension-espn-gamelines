@@ -1,19 +1,11 @@
-
-
-export const FETCH_LINES_SUCCESS = 'FETCH_LINES_SUCCESS';
-  
-export const fetchLinesSuccess = products => ({
-  type: FETCH_PRODUCTS_SUCCESS,
-  payload: { products }
-});
-export function fetchLines() {
-    return dispatch => {
+export default  function getLines() {
         let BASE_URL = 'https://api.actionnetwork.com/web/v1/scoreboard/';
         let sports = ['ncaaf', 'soccer', 'nba', 'nfl', 'nhl', 'mlb'];
+        let promises = []
         
           for (var i = 0; i < sports.length; i++) {
             let sport = sports[i];
-            fetch(BASE_URL + sport, {
+            promises.push(fetch(BASE_URL + sport, {
               credentials: 'omit',
               headers: {
                 accept: 'application/json',
@@ -29,12 +21,19 @@ export function fetchLines() {
               .then(response => response.json())
               .then(json => {
                 if (json.league && (json.games.length > 1)) {
-                  console.log(json)
-                  dispatch(fetchLinesSuccess(json));
-                  return json
+                  let response = {}
+                  response[json.league.name] = json
+                   return response
+                }else{
+                  return null
                 }
-              });
+              }));
           
         }
-  }
-}
+    
+        return Promise.all(promises).then(function(values) {
+          
+        });
+    }
+
+  

@@ -369,26 +369,7 @@ const backgroundBlack = {
   margin: '10px',
   border: '1px solid black'
 };
-var hasOwnProperty = Object.prototype.hasOwnProperty;
 
-const isEmpty = obj => {
-  if (obj == null) return true;
-  if (obj.length > 0) return false;
-  if (obj.length === 0) return true;
-  if (typeof obj !== 'object') return true;
-  for (var key in obj) {
-    if (hasOwnProperty.call(obj, key)) return false;
-  }
-
-  return true;
-};
-const removeNullProperties = obj => {
-  for (var propName in obj) {
-    if (obj[propName] === null || obj[propName] === undefined) {
-      delete obj[propName];
-    }
-  }
-};
 
 class LinesComponent extends Component {
   constructor(props) {
@@ -537,12 +518,11 @@ class LinesComponent extends Component {
   renderLiveEvents = () => {
     let { liftedContent, linesResponse } = this.state;
     console.log(linesResponse)
-    let sport = linesResponse["nfl"]
 
     return (
       <div style={marginLeft30}>
         <div>
-              <h2>{linesResponse[sport].league.description}</h2>
+              <h2>{ linesResponse["nfl"].league.description}</h2>
               {this.renderGames(sport.games)}
             </div>
           

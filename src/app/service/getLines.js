@@ -21,8 +21,9 @@ export default  function getLines() {
               .then(response => response.json())
               .then(json => {
                 if (json.league && (json.games.length > 1)) {
-                  let response = {}
-                  response[json.league.name] = json
+                   let response = {}
+                   response[json.league.name] = json
+                   console.log(response)
                    return response
                 }else{
                   return null
@@ -31,8 +32,15 @@ export default  function getLines() {
           
         }
     
-        return Promise.all(promises).then(function(values) {
-          
+        return Promise.all(promises).then(res => {
+            
+            let response = {} 
+
+            res.forEach(res => {
+                response = { ...response, ...res }
+            })
+           
+            return response
         });
     }
 

@@ -348,10 +348,10 @@ const currentOdds = [
     inserted: '2019-09-13T00:23:27.701967+00:00'
   }
 ];
-const imageStyle ={ 
-    height:'40px',
-    width:'40px'
-}
+const imageStyle = {
+  height: '40px',
+  width: '40px'
+};
 const marginLeft30 = {
   marginLeft: '30px'
 };
@@ -370,7 +370,6 @@ const backgroundBlack = {
   border: '1px solid black'
 };
 
-
 class LinesComponent extends Component {
   constructor(props) {
     super(props);
@@ -385,7 +384,6 @@ class LinesComponent extends Component {
   };
 
   renderLines = lines => {
-    
     let uniqueIds = [...new Set(lines.map(line => line.book_id))];
     let currentLines = uniqueIds.map(id => {
       return lines
@@ -456,20 +454,24 @@ class LinesComponent extends Component {
   }
 
   findGame = (streamingTeams, games) => {
-    games.filter(
-      game =>
-        game.teams.includes(team => team.full_name === streamingTeams[0]) ||
-        game.teams.includes(team => team.full_name === streamingTeams[1])
-    );
-    // _.filter(games, function(game) { return !o.active;
-    // });
-    // _.get(games, 'games.teams');
-    // var underAgeUser = _.find(games, function(game) {
-    //
-    //     console.log(names)
-    //     // return (game.teams.full_name.includes[0].full_name === streamingTeams[0] || game.teams[0].full_name === streamingTeams[1])
-    // });
-    // return games.find(game => );
+
+    for (var i = 0; i < games.length; i++) {
+        if (games[i].teams.includes(team => team.full_name === streamingTeams[0])) {
+            return games[i];
+          } else if (
+            games[i].teams.includes(team => team.full_name === streamingTeams[1])
+          ) {
+            return games[i];
+          } else if (
+            games[i].teams.includes(team => team.short_name === streamingTeams[0])
+          ) {
+            return games[i];
+          } else if (
+            games[i].teams.includes(team => team.short_name === streamingTeams[1])
+          ) {
+            return games[i];
+          }
+    }
   };
 
   parseCurrentTeams(teamString) {
@@ -477,7 +479,7 @@ class LinesComponent extends Component {
     let vsIndex = parsed.indexOf('vs.');
 
     let teamOne = parsed.slice(0, vsIndex);
-    let teamTwo = parsed.slice(vsIndex);
+    let teamTwo = parsed.slice(vsIndex + 3);
 
     return [teamOne.join(' '), teamTwo.join(' ')];
   }
@@ -485,7 +487,6 @@ class LinesComponent extends Component {
   renderCurrentLines = () => {
     let { liftedContent, linesResponse } = this.state;
     let teams = this.parseCurrentTeams(liftedContent.name);
-
     if (liftedContent.subtitle.search(/ncaa/i) !== -1) {
       //   return JSON.stringify(this.findGame(teams, linesResponse['ncaaf'].games));
     } else if (liftedContent.subtitle.search(/nba/i) !== -1) {
@@ -495,19 +496,28 @@ class LinesComponent extends Component {
     } else if (liftedContent.subtitle.search(/nhl/i) !== -1) {
       //   return this.findGame(teams, linesResponse['nhl'].games);
     } else if (liftedContent.subtitle.search(/mlb/i) !== -1) {
-      return this.findGame(teams, linesResponse['mlb'].games);
+      let game = this.findGame(teams, linesResponse['mlb'].games);
+      console.log(game);
+      return <div> {JSON.stringify(game)} </div>;
     } else {
       return <p>No lines available for current stream</p>;
     }
   };
 
   renderGames = games => {
-    console.log(games);
     return games.map(game => {
       return (
         <div>
-          <img style={imageStyle} data-src={game.teams[0].logo} src={game.teams[0].logo} />
-          <img style={imageStyle} data-src={game.teams[1].logo} src={game.teams[1].logo} />
+          <img
+            style={imageStyle}
+            data-src={game.teams[0].logo}
+            src={game.teams[0].logo}
+          />
+          <img
+            style={imageStyle}
+            data-src={game.teams[1].logo}
+            src={game.teams[1].logo}
+          />
 
           <p>{game.teams[0].full_name + ' vs. ' + game.teams[1].full_name}</p>
           {this.renderCurrentOdds(game.odds)}
@@ -517,15 +527,15 @@ class LinesComponent extends Component {
   };
   renderLiveEvents = () => {
     let { liftedContent, linesResponse } = this.state;
-    console.log(linesResponse)
+    //console.log(linesResponse)
 
     return (
       <div style={marginLeft30}>
         <div>
-              <h2>{ linesResponse["nfl"].league.description}</h2>
-              {this.renderGames(sport.games)}
-            </div>
-          
+          <h2>{linesResponse['nfl'].league.description}</h2>
+          {/* {this.renderGames(sport.games)} */}
+        </div>
+
         {/* {Object.keys(linesResponse).map(sport => {
           // console.log(linesResponse[sport].league.description);
        
@@ -535,25 +545,24 @@ class LinesComponent extends Component {
   };
 
   render() {
-  
     return (
       <div>
         <section style={marginLeft30}>
           <h1>STREAMING EVENT</h1>
-          {/* {this.renderCurrentLines()} */}
+          {this.renderCurrentLines()}
         </section>
         <section style={marginLeft30}>
           <h1>LIVE EVENTS</h1>
           {this.renderLiveEvents()}
         </section>
-        <section style={marginLeft30}>
-          <h1>SCHEDUELED EVENTS</h1>
+        {/* <section style={marginLeft30}>
+          <h1>SCHEDUELED EVENTS</h1> */}
           {/* {this.renderUpcomingEvents()} */}
-        </section>
-        <section style={marginLeft30}>
-          <h1>PREVIOUS EVENTS</h1>
+        {/* </section>
+        <section style={marginLeft30}> */}
+          {/* <h1>PREVIOUS EVENTS</h1> */}
           {/* {this.renderCurrentLines()} */}
-        </section>
+        {/* </section> */}
         <footer className={'footer'}></footer>
       </div>
     );

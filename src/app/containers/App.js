@@ -44,11 +44,11 @@ class App extends Component {
   componentDidMount() {
   
     getLines().then(linesResponse  => {
-      let nonNullLinesResponse = linesResponse.filter(Boolean)
+     // let nonNullLinesResponse = linesResponse.filter(Boolean)
       // nonNullLinesResponse.map(field => ...field)
-
+        
       this.setState({
-        linesResponse:Object.assign({},nonNullLinesResponse)
+        linesResponse:linesResponse
       })
       
     });
@@ -56,7 +56,7 @@ class App extends Component {
   }
   render() {
       const {linesResponse,liftedContent} = this.state
-
+      
     return (
       <div>
         <header>

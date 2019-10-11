@@ -104,6 +104,7 @@ function messaging(request, sender, sendResponse) {
   if (request.type === 'OPEN') {
     let position = 'devtools-left';
     if (['remote', 'panel', 'left', 'right', 'bottom'].indexOf(request.position) !== -1) {
+        console.log(request.position)
       position = 'devtools-' + request.position;
     }
     openDevToolsWindow(position);

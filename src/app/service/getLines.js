@@ -1,18 +1,18 @@
 export default  function getLines() {
         let BASE_URL = 'https://api.actionnetwork.com/web/v1/scoreboard/';
         let sports = ['ncaaf', 'soccer', 'nba', 'nfl', 'nhl', 'mlb'];
+        let queryParams = "?bookIds=15,30,14,13,24,49&date=20190925"
         let promises = []
         
           for (var i = 0; i < sports.length; i++) {
             let sport = sports[i];
-            promises.push(fetch(BASE_URL + sport, {
+            promises.push(fetch(BASE_URL + sport + queryParams, {
               credentials: 'omit',
               headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
                 'sec-fetch-mode': 'no-cors'
               },
-              referrer: 'https://www.actionnetwork.com/nfl/live-odds',
               referrerPolicy: 'no-referrer-when-downgrade',
               body: null,
               method: 'GET',
@@ -23,7 +23,7 @@ export default  function getLines() {
                 if (json.league && (json.games.length > 1)) {
                    let response = {}
                    response[json.league.name] = json
-                   console.log(response)
+                //    console.log(response)
                    return response
                 }else{
                   return null

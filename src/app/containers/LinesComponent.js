@@ -3,7 +3,8 @@ import BOOKS from '../constants/books';
 import Tab from './Tab';
 import Tabs from './Tabs';
 import Image from './Image';
-
+import { inflateSync } from 'zlib';
+import OddsComponent from './OddsComponent';
 const imageStyle = {
   height: '40px',
   width: '40px'
@@ -64,7 +65,7 @@ const padding10 = {
   padding: '10px'
 };
 const marginBottom = {
-    marginBottom:'10px'
+  marginBottom: '10px'
 }
 
 class LinesComponent extends Component {
@@ -75,7 +76,7 @@ class LinesComponent extends Component {
     };
   }
   findBook = bookId => {
-    let book = BOOKS.find(function(book) {
+    let book = BOOKS.find(function (book) {
       return book.id === bookId;
     });
     if (book) {
@@ -85,96 +86,11 @@ class LinesComponent extends Component {
     }
   };
 
-  renderLines = (currentLines, homeTeam, awayTeam) => {
-    return (
-      <section style={marginTop10}>
-        <Tabs>
-          <div label="spread">
-            <table className="table table-striped table-bordered table-hover">
-              <thead>
-                <th scope="col">Book</th>
-                <th scope="col">{homeTeam.display_name}</th>
-                <th scope="col">{awayTeam.display_name}</th>
-              </thead>
-              <tbody>
-                {currentLines.map(line => {
-                  return (
-                    <tr>
-                      <th scope="row">{this.findBook(line.book_id)}</th>
-                      <td>
-                        <p style={(boldText, marginNone)}>
-                          {line.spread_home ? line.spread_home : '-'}
-                        </p>
-                        <i style={weakText}>
-                          {line.spread_home_line ? line.spread_home_line : '-'}
-                        </i>
-                      </td>
-                      <td>
-                        <p style={(boldText, marginNone)}>
-                          {line.spread_away ? line.spread_away : '-'}
-                        </p>
-                        <i style={weakText}>
-                          {line.spread_away_line ? line.spread_away_line : '-'}
-                        </i>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-          <div style={tabStyle} label="money line">
-            <table className="table table-striped table-bordered table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">Book</th>
-                  <th scope="col">{homeTeam.display_name}</th>
-                  <th scope="col">{awayTeam.display_name}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentLines.map(line => {
-                  return (
-                    <tr>
-                      <th scope="row">{this.findBook(line.book_id)}</th>
-                      <td>{line.ml_home ? line.ml_home : '-'}</td>
-                      <td>{line.ml_away ? line.ml_away : '-'}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-          <div style={tabStyle} label="total">
-            <table className="table table-striped table-bordered table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">Book</th>
-                  <th scope="col">{homeTeam.display_name}</th>
-                  <th scope="col">{awayTeam.display_name}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentLines.map(line => {
-                  return (
-                    <tr>
-                      <th scope="row">{this.findBook(line.book_id)}</th>
-                      <td>{line.ml_home ? line.ml_home : '-'}</td>
-                      <td>{line.ml_away ? line.ml_away : '-'}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </Tabs>
-      </section>
-    );
-  };
-
+  
+  // TOTAL: over total / spread away line 
+  //        under total / spread home line 
+  //
   findGame = (streamingTeams, games) => {
-     console.log(streamingTeams)
-     console.log(games)
     for (var i = 0; i < games.length; i++) {
       if (
         games[i].teams.some(
@@ -195,16 +111,15 @@ class LinesComponent extends Component {
   renderCurrentLines = () => {
 
     let { liftedContent, linesResponse } = this.state;
-    
+
     let gameFound = null;
 
     if (liftedContent.subtitle.search(/ncaa/i) !== -1) {
-       
+
       gameFound = this.findGame(
         liftedContent.name.split(' '),
         linesResponse['ncaaf'].games
       );
-      console.log(gameFound)
     } else if (liftedContent.subtitle.search(/nba/i) !== -1) {
       gameFound = this.findGame(
         liftedContent.name.split(' '),
@@ -226,10 +141,7 @@ class LinesComponent extends Component {
         linesResponse['mlb'].games
       );
     }
-    // console.log(gameFound)
-    console.log(liftedContent)
-    console.log(gameFound)
-    console.log(gameFound.odds)
+
     return (
       <div>
         {(liftedContent && gameFound && gameFound.odds) ? (
@@ -248,8 +160,8 @@ class LinesComponent extends Component {
             </div>
           </div>
         ) : (
-          <p>No lines available for current stream</p>
-        )}
+            <p>No lines available for current stream</p>
+          )}
       </div>
     );
   };
@@ -262,28 +174,32 @@ class LinesComponent extends Component {
       .pop();
     return [homeTeam, awayTeam];
   };
-  parseLines = lines => {
-    let uniqueIds = [...new Set(lines.map(line => line.book_id))];
-    let currentLines = uniqueIds.map(id => {
-      return lines
-        .filter(function(line) {
-          return line.book_id === id;
-        })
-        .pop();
-    });
+  // parseLines = lines => {
+  //   let uniqueIds = [...new Set(lines.map(line => line.book_id))];
+  //   let currentLines = uniqueIds.map(id => {
+  //     return lines
+  //       .filter(function(line) {
+  //         return line.book_id === id;
+  //       })
+  //       .pop();
+  //   });
 
-    return currentLines;
-  };
+  //   return currentLines;
+  // };
+
   renderGames = games => {
     return games.map((game, index) => {
       if (game.odds) {
-        let currentLines = this.parseLines(game.odds);
+        // let currentLines = this.parseLines(game.odds);
         let teams = this.parseTeams(game);
         let date = new Date(game.start_time);
-       
-        
+
+
+
         return (
           <div>
+
+
             <div
               className="list-group-item list-group-item-action"
               data-toggle="collapse"
@@ -303,21 +219,18 @@ class LinesComponent extends Component {
                   </div>
                   <div className="col text-center align-middle">
                     <h1>@</h1>
-                    
-                    {/* <small>{new Date(game.start_time).toISOString}</small> */}
                   </div>
                   <div className="card text-center shadow-lg  rounded">
                     <div style={padding10} className="card-block">
                       <h6 className="card-title">{teams[1].full_name}</h6>
                       <Image url={teams[1].logo}></Image>
-                     
+
                     </div>
                   </div>
-                 
-                </div>
-                <div className="container justify-content-center">
-                <small>{date.toString()}</small>
 
+                </div>
+                <div className="container text-center ">
+                  <small>{date.toString()}</small>
                 </div>
               </div>
             </div>
@@ -328,7 +241,7 @@ class LinesComponent extends Component {
             >
               <div className="card card-body">
                 <div style={marginLeft30}>
-                  {this.renderLines(currentLines, teams[0], teams[1])}
+                  <OddsComponent odds={game.odds} awayTeam={teams[0]} homeTeam={teams[1]} />
                 </div>
               </div>
             </div>
@@ -342,6 +255,7 @@ class LinesComponent extends Component {
 
   renderAllOdds = () => {
     let { linesResponse } = this.state;
+    // console.log(JSON.stringify(linesResponse,null,2))
     return (
       <section style={padding20}>
         <Tabs>
@@ -356,11 +270,11 @@ class LinesComponent extends Component {
                   <div label={sport}>
                     {games.length > 0 ? (
                       <div class="list-group">
-                      {this.renderGames(games)}
+                        {this.renderGames(games)}
                       </div>
                     ) : (
-                      'no games'
-                    )}
+                        'no games'
+                      )}
                   </div>
                 );
               })}

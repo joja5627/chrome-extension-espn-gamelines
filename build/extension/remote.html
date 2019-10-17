@@ -1,38 +1,49 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"></head><title>RemoteDev</title><style>html {
-  height: 100%;
-  width: 100%;
+<!DOCTYPE html><html><head><meta charset="UTF-8"></head><title>RemoteDev</title><style> html {
+   font-size: 1rem;
+ }
+ @include media-breakpoint-up(sm) {
+   html {
+       font-size: 1.2rem;
+    }
+   }
+
+ @include media-breakpoint-up(md) {
+   html {
+       font-size: 1.4rem;
+    }
+   }
+
+ @include media-breakpoint-up(lg) {
+   html {
+       font-size: 1.6rem;
+   }
 }
-body {
-  font-size: small !important;
-  overflow: hidden;
-  height: 100%;
-  width: 100%;
-  min-width: 600px;
-  min-height: 400px;
-  margin: 20;
-  padding: 20;
+
+ body {
+   font-size: small !important;
+   overflow: scroll;
+  
+   margin: 20;
+   padding: 20;
+   -webkit-app-region: drag !important;   
+  
+ }
  
-}
-.draggable {
-  position: absolute;
-  width: 100%;
-  height: 30px;
-  -webkit-app-region: drag;
-  }
-.tab-list {
-  border-bottom: 1px solid #ccc;
-  padding-left: 0;
-  }
 
-.tab-list-item {
-  display: inline-block;
-  list-style: none;
-  margin-bottom: -1px;
-  padding: 0.5rem 0.75rem;
-  }
+ .tab-list {
+   padding-left: 0;
+   }
 
-.tab-list-active {
-  background-color: white;
-  border: solid #ccc;
-  border-width: 1px 1px 0 1px;
-  }</style><body><div id="root"></div><script src="/js/remote.bundle.js"></script></body></html>
+ .tab-list-item {
+   display: inline-block;
+   list-style: none;
+   margin-bottom: -1px;
+   padding: 0.5rem 0.75rem;
+   }
+
+ .tab-list-active {
+   background-color: white;
+   border: solid #ccc;
+   border-radius: .25rem;
+   border: 1px solid rgba(0,0,0,.125);
+   }</style><body><div id="root"></div><script src="/js/remote.bundle.js"></script></body></html>

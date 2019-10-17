@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { stringify } from 'querystring';
 
 export const fetchAsBlob = url => fetch(url).then(response => response.blob());
 
@@ -12,7 +13,8 @@ export const convertBlobToBase64 = blob =>
     reader.readAsDataURL(blob);
   });
 const imgStyle = {
-    height: '50px'
+    height: '50px',
+    display: 'inline'
 }
 export default class Image extends Component {
   constructor(props) {
@@ -34,7 +36,9 @@ export default class Image extends Component {
   }
 
   render() {
-    const { imageBlob } = this.state;
-    return <div>{imageBlob && <img  style={imgStyle} src={imageBlob} />}</div>;
+    const { imageBlob,backgroundColor } = this.state;
+    // let imageStyle = {...{height: '50px'},...{backgroundColor:`#${backgroundColor}`}}
+    return <a>{imageBlob  && <img  className="img-fluid" style={imgStyle} src={imageBlob} />}</a>
+       
   }
 }

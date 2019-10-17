@@ -40,4 +40,4 @@ chrome.runtime.getBackgroundPage(({ store }) => {
   );
 });
 
-if (position !== '#popup') document.body.style.minHeight = '100%';
+// if (position !== '#popup') document.body.style.minHeight = '100%';

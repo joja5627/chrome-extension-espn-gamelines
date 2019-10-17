@@ -6,8 +6,9 @@
   "manifest_version": 2,
   "page_action": {
     "default_icon": "img/logo/gray.png",
-    "default_title": "ESPN Games Lines",
+    "default_title": "parlayed",
     "default_popup": "window.html"
+    
   },
   "commands": {
     "devtools-left": {

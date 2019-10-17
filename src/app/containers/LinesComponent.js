@@ -5,6 +5,8 @@ import Tabs from './Tabs';
 import Image from './Image';
 import { inflateSync } from 'zlib';
 import OddsComponent from './OddsComponent';
+import GameCanvas from './GameCanvas';
+import GamesComponent from './GamesComponent'
 const imageStyle = {
   height: '40px',
   width: '40px'
@@ -21,12 +23,8 @@ const tabStyle = {
   margin: '10px',
   padding: '10px'
 };
-const padding20 = {
-  padding: '20px'
-};
-const marginLeft30 = {
-  marginLeft: '30px'
-};
+
+
 const marginRight30 = {
   marginRight: '30px'
 };
@@ -64,31 +62,23 @@ const fillerImage = {
 const padding10 = {
   padding: '10px'
 };
-const marginBottom = {
-  marginBottom: '10px'
-}
+
+const margin0 = {
+  margin: '0px !important'
+};
 
 class LinesComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ...props
+      ...props,
+      showAllOdds: false
     };
+    this.toggleShowOdds = this.toggleShowOdds.bind(this);
   }
-  findBook = bookId => {
-    let book = BOOKS.find(function (book) {
-      return book.id === bookId;
-    });
-    if (book) {
-      return book.display_name;
-    } else {
-      return <div>book not found</div>;
-    }
-  };
 
-  
-  // TOTAL: over total / spread away line 
-  //        under total / spread home line 
+  // TOTAL: over total / spread away line
+  //        under total / spread home line
   //
   findGame = (streamingTeams, games) => {
     for (var i = 0; i < games.length; i++) {
@@ -108,14 +98,10 @@ class LinesComponent extends Component {
     return null;
   };
 
-  renderCurrentLines = () => {
-
-    let { liftedContent, linesResponse } = this.state;
-
+  renderCurrentLines = (liftedContent, linesResponse) => {
     let gameFound = null;
 
     if (liftedContent.subtitle.search(/ncaa/i) !== -1) {
-
       gameFound = this.findGame(
         liftedContent.name.split(' '),
         linesResponse['ncaaf'].games
@@ -144,187 +130,34 @@ class LinesComponent extends Component {
 
     return (
       <div>
-        {(liftedContent && gameFound && gameFound.odds) ? (
-          <div>
-            <div style={firstSection}>
-              <p>{liftedContent.name}</p>
-              <p>{liftedContent.date}</p>
-              <p>{liftedContent.subtitle}</p>
-              <p>{liftedContent.time}</p>
-            </div>
-            <div>
-              {this.renderLines(
-                this.parseLines(gameFound.odds),
-                this.parseTeams(game)
-              )}
-            </div>
-          </div>
+        {gameFound && gameFound.odds ? (
+            <GamesComponent games={[gameFound]}/>
+          
         ) : (
-            <p>No lines available for current stream</p>
-          )}
+          <p>No lines available for current stream</p>
+        )}
       </div>
     );
   };
-  parseTeams = game => {
-    const homeTeam = game.teams
-      .filter(team => team.id === game.home_team_id)
-      .pop();
-    const awayTeam = game.teams
-      .filter(team => team.id != game.home_team_id)
-      .pop();
-    return [homeTeam, awayTeam];
-  };
-  // parseLines = lines => {
-  //   let uniqueIds = [...new Set(lines.map(line => line.book_id))];
-  //   let currentLines = uniqueIds.map(id => {
-  //     return lines
-  //       .filter(function(line) {
-  //         return line.book_id === id;
-  //       })
-  //       .pop();
-  //   });
-
-  //   return currentLines;
-  // };
-
-  renderGames = games => {
-    return games.map((game, index) => {
-      if (game.odds) {
-        // let currentLines = this.parseLines(game.odds);
-        let teams = this.parseTeams(game);
-        let date = new Date(game.start_time);
+  
+  
 
 
-
-        return (
-          <div>
-
-
-            <div
-              className="list-group-item list-group-item-action"
-              data-toggle="collapse"
-              style={marginBottom}
-              href={`#collapse-${index}`}
-              role="button"
-              aria-expanded="false"
-              aria-controls={`collapse-${index}`}
-            >
-              <div className="container">
-                <div className="card-columns d-flex justify-content-center">
-                  <div className="card text-center shadow-lg  rounded">
-                    <div style={padding10} className="card-block">
-                      <h6 className="card-title">{teams[0].full_name}</h6>
-                      <Image url={teams[0].logo}></Image>
-                    </div>
-                  </div>
-                  <div className="col text-center align-middle">
-                    <h1>@</h1>
-                  </div>
-                  <div className="card text-center shadow-lg  rounded">
-                    <div style={padding10} className="card-block">
-                      <h6 className="card-title">{teams[1].full_name}</h6>
-                      <Image url={teams[1].logo}></Image>
-
-                    </div>
-                  </div>
-
-                </div>
-                <div className="container text-center ">
-                  <small>{date.toString()}</small>
-                </div>
-              </div>
-            </div>
-            <div
-              style={marginTop10}
-              className="collapse"
-              id={`collapse-${index}`}
-            >
-              <div className="card card-body">
-                <div style={marginLeft30}>
-                  <OddsComponent odds={game.odds} awayTeam={teams[0]} homeTeam={teams[1]} />
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      } else {
-        return <div> no odds for this matchup</div>;
-      }
+  toggleShowOdds = () => {
+    this.setState({
+      showAllOdds: !this.state.showAllOdds
     });
   };
 
-  renderAllOdds = () => {
-    let { linesResponse } = this.state;
-    // console.log(JSON.stringify(linesResponse,null,2))
-    return (
-      <section style={padding20}>
-        <Tabs>
-          <div style={tabStyle} label="live">
-            <Tabs>
-              {Object.keys(linesResponse).map(sport => {
-                let games = linesResponse[sport].games.filter(
-                  game => game.status === 'inprogress'
-                );
-
-                return (
-                  <div label={sport}>
-                    {games.length > 0 ? (
-                      <div class="list-group">
-                        {this.renderGames(games)}
-                      </div>
-                    ) : (
-                        'no games'
-                      )}
-                  </div>
-                );
-              })}
-            </Tabs>
-          </div>
-
-          <div style={tabStyle} label="schedueled">
-            <Tabs>
-              {Object.keys(linesResponse).map(sport => {
-                let games = linesResponse[sport].games.filter(
-                  game => game.status === 'scheduled'
-                );
-
-                return (
-                  <div label={sport}>
-                    {games.length > 0 ? this.renderGames(games) : 'no games'}
-                  </div>
-                );
-              })}
-            </Tabs>
-          </div>
-          <div style={tabStyle} label="complete">
-            <Tabs>
-              {Object.keys(linesResponse).map(sport => {
-                let games = linesResponse[sport].games.filter(
-                  game => game.status === 'complete'
-                );
-                return (
-                  <div label={sport}>
-                    {games.length > 0 ? this.renderGames(games) : 'no games'}
-                  </div>
-                );
-              })}
-            </Tabs>
-          </div>
-        </Tabs>
-      </section>
-    );
-  };
-
   render() {
+    let { liftedContent, linesResponse } = this.state;
     return (
-      <div style={marginLeft30}>
-        <section style={marginLeft30}>
-          <h4>CURRENTLY STREAMING</h4>
-          {this.renderCurrentLines()}
+      <div>
+        <section>
+          {this.renderCurrentLines(liftedContent, linesResponse)}
         </section>
-        <section>{this.renderAllOdds()}</section>
-
-        <footer className={'footer'}></footer>
+        
+       
       </div>
     );
   }

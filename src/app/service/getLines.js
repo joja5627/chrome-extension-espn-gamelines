@@ -23,7 +23,7 @@ export default  function getLines() {
                 if (json.league && (json.games.length > 1)) {
                    let response = {}
                    response[json.league.name] = json
-                   console.log(response)
+                //    console.log(response)
                    return response
                 }else{
                   return null
